@@ -238,14 +238,14 @@ const atn::ATN& Parser::getATNWithBypassAlts() {
   //      How large can that thing become?
   auto *cache = getBypassAltsAtnCache();
   {
-    std::shared_lock<std::shared_mutex> lock(cache->mutex);
+    // std::shared_lock<std::shared_mutex> lock(cache->mutex);
     auto existing = cache->map.find(serializedAtn);
     if (existing != cache->map.end()) {
       return *existing->second;
     }
   }
 
-  std::unique_lock<std::shared_mutex> lock(cache->mutex);
+  // std::unique_lock<std::shared_mutex> lock(cache->mutex);
   auto existing = cache->map.find(serializedAtn);
   if (existing != cache->map.end()) {
     return *existing->second;
@@ -575,7 +575,7 @@ std::vector<std::string> Parser::getRuleInvocationStack(RuleContext *p) {
 std::vector<std::string> Parser::getDFAStrings() {
   atn::ParserATNSimulator *simulator = getInterpreter<atn::ParserATNSimulator>();
   if (!simulator->decisionToDFA.empty()) {
-    UniqueLock<Mutex> lck(_mutex);
+    // UniqueLock<Mutex> lck(_mutex);
 
     std::vector<std::string> s;
     for (size_t d = 0; d < simulator->decisionToDFA.size(); d++) {
@@ -590,7 +590,7 @@ std::vector<std::string> Parser::getDFAStrings() {
 void Parser::dumpDFA() {
   atn::ParserATNSimulator *simulator = getInterpreter<atn::ParserATNSimulator>();
   if (!simulator->decisionToDFA.empty()) {
-    UniqueLock<Mutex> lck(_mutex);
+    // UniqueLock<Mutex> lck(_mutex);
     bool seenOne = false;
     for (size_t d = 0; d < simulator->decisionToDFA.size(); d++) {
       dfa::DFA &dfa = simulator->decisionToDFA[d];

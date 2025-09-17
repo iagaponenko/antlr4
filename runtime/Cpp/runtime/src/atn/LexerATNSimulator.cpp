@@ -71,7 +71,7 @@ size_t LexerATNSimulator::match(CharStream *input, size_t mode) {
   const dfa::DFA &dfa = _decisionToDFA[mode];
   dfa::DFAState* s0;
   {
-    SharedLock<SharedMutex> stateLock(atn._stateMutex);
+    //SharedLock<SharedMutex> stateLock(atn._stateMutex);
     s0 = dfa.s0;
   }
   if (s0 == nullptr) {
@@ -173,7 +173,7 @@ size_t LexerATNSimulator::execATN(CharStream *input, dfa::DFAState *ds0) {
 
 dfa::DFAState *LexerATNSimulator::getExistingTargetState(dfa::DFAState *s, size_t t) {
   dfa::DFAState* retval = nullptr;
-  SharedLock<SharedMutex> edgeLock(atn._edgeMutex);
+  //SharedLock<SharedMutex> edgeLock(atn._edgeMutex);
   if (t <= MAX_DFA_EDGE) {
     auto iterator = s->edges.find(t - MIN_DFA_EDGE);
 #if LEXER_DEBUG_ATN == 1
@@ -519,7 +519,7 @@ void LexerATNSimulator::addDFAEdge(dfa::DFAState *p, size_t t, dfa::DFAState *q)
     return;
   }
 
-  UniqueLock<SharedMutex> edgeLock(atn._edgeMutex);
+  //UniqueLock<SharedMutex> edgeLock(atn._edgeMutex);
   p->edges[t - MIN_DFA_EDGE] = q; // connect
 }
 
@@ -551,7 +551,7 @@ dfa::DFAState *LexerATNSimulator::addDFAState(ATNConfigSet *configs, bool suppre
   dfa::DFA &dfa = _decisionToDFA[_mode];
 
   {
-    UniqueLock<SharedMutex> stateLock(atn._stateMutex);
+    //UniqueLock<SharedMutex> stateLock(atn._stateMutex);
     auto [existing, inserted] = dfa.states.insert(proposed);
     if (!inserted) {
       delete proposed;

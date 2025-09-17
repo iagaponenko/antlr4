@@ -39,7 +39,7 @@ misc::IntervalSet ATN::nextTokens(ATNState *s, RuleContext *ctx) const {
 
 misc::IntervalSet const& ATN::nextTokens(ATNState *s) const {
   if (!s->_nextTokenUpdated) {
-    UniqueLock<Mutex> lock(_mutex);
+    //UniqueLock<Mutex> lock(_mutex);
     if (!s->_nextTokenUpdated) {
       s->_nextTokenWithinRule = nextTokens(s, nullptr);
       s->_nextTokenUpdated = true;
